@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>NutriMama – Datos de la mamá</title>
+
+    <!-- Fuente Lato -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --pink-strong: #DA627D;
+            --pink-soft:  #FFA5AB;
+            --peach:      #FFE8D2;
+            --green-soft: #B6E2BA;
+            --text-dark:  #333333;
+            --text-muted: #777777;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(180deg, #fff 0%, #FFE8D2 100%);
+            margin: 0;
+            padding: 0;
+            color: var(--text-dark);
+            font-size: 16px; /* body 16px */
+        }
+
+        /* HEADER */
+
+        .header {
+            background: var(--pink-soft);
+            color: white;
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .header h2 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 24px; /* H2 */
+            letter-spacing: 0.03em;
+        }
+
+        .logout {
+            background: #fff;
+            color: var(--pink-strong);
+            padding: 8px 18px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: 600;
+            border: 1px solid #ffffff;
+            transition: 0.2s;
+            font-size: 14px;
+        }
+
+        .logout:hover {
+            background: #FFE8D2;
+            border-color: #FFE8D2;
+        }
+
+        /* CONTENEDOR PRINCIPAL */
+
+        .page-wrapper {
+            padding: 32px 16px 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 860px;
+            background: #ffffff;
+            padding: 28px 32px 32px;
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border: 1px solid rgba(255,165,171,0.35);
+        }
+
+        .page-title {
+            margin: 0 0 4px;
+            font-size: 28px;  /* H1 28px */
+            font-weight: 700;
+            color: var(--pink-strong);
+        }
+
+        .page-subtitle {
+            margin: 0 0 20px;
+            font-size: 16px;
+            color: var(--text-muted);
+        }
+
+        /* SECCIONES */
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 22px;
+            margin-bottom: 10px;
+        }
+
+        .section-pill {
+            width: 10px;
+            height: 24px;
+            border-radius: 999px;
+            background: linear-gradient(180deg, var(--pink-strong), var(--pink-soft));
+        }
+
+        .section-title {
+            font-size: 20px; /* H3 20px */
+            font-weight: 600;
+            color: var(--pink-strong);
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 9px 11px;
+            margin-top: 6px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 15px;
+            font-family: inherit;
+            outline: none;
+            transition: 0.15s border-color, 0.15s box-shadow, 0.15s background-color;
+            background-color: #fff;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        textarea:focus,
+        select:focus {
+            border-color: var(--pink-soft);
+            box-shadow: 0 0 0 3px rgba(255,165,171,0.28);
+            background-color: #fffaf9;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .helper {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* CHECKBOXES */
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px 18px;
+            margin-top: 8px;
+        }
+
+        .checkbox-group label {
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--pink-strong); /* navegadores modernos */
+            cursor: pointer;
+        }
+
+        /* BOTÓN */
+
+        .btn-submit {
+            display: block;
+            width: 100%;
+            background: var(--pink-strong);
+            border: none;
+            padding: 12px;
+            color: white;
+            font-size: 17px;
+            border-radius: 999px;
+            cursor: pointer;
+            margin-top: 26px;
+            transition: 0.2s;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        .btn-submit:hover {
+            background: #c45269;
+            box-shadow: 0 8px 18px rgba(218,98,125,0.4);
+        }
+
+        /* BADGE PEQUEÑO PARA INFO EXTRA (opcional) */
+        .pill-info {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--green-soft);
+            color: #24513a;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 500;
+            margin-top: 4px;
+        }
+
+        @media (max-width: 720px) {
+            .container {
+                padding: 20px 18px 24px;
+                border-radius: 14px;
+            }
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h2>NutriMama</h2>
+    <a class="logout" th:href="@{/logout}">Cerrar sesión</a>
+</div>
+
+<div class="page-wrapper">
+    <div class="container">
+
+        <h1 class="page-title">Datos de la mamá</h1>
+        <p class="page-subtitle">
+            Completa tu perfil para que NutriMama pueda darte recomendaciones de alimentación personalizadas.
+        </p>
+
+        <form th:action="@{/formulario-mama}"
+              th:object="${mamaProfileRequest}"
+              method="post">
+
+            <!-- Datos básicos -->
+            <div class="section-header">
+                <span class="section-pill"></span>
+                <span class="section-title">Datos básicos</span>
+            </div>
+
+            <div class="grid-2">
+                <div class="input-group">
+                    <label>Nombres</label>
+                    <input type="text" th:field="*{nombre}" readonly>
+                    <p class="helper">Tomado de tu registro de cuenta.</p>
+                </div>
+
+                <div class="input-group">
+                    <label>Apellidos</label>
+                    <input type="text" th:value="${usuario.lastName}" readonly>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="input-group">
+                    <label>Edad</label>
+                    <input type="number" min="10" max="60" th:field="*{edad}">
+                </div>
+
+                <div class="input-group">
+                    <label>Semanas de gestación</label>
+                    <input type="number" min="1" max="40" th:field="*{semanas}">
+                </div>
+            </div>
+
+            <!-- Datos físicos -->
+            <div class="section-header">
+                <span class="section-pill"></span>
+                <span class="section-title">Datos físicos</span>
+            </div>
+
+            <div class="grid-2">
+                <div class="input-group">
+                    <label>Peso actual (kg)</label>
+                    <input type="number" step="0.1" th:field="*{peso}">
+                </div>
+                <div class="input-group">
+                    <label>Talla (cm)</label>
+                    <input type="number" th:field="*{talla}">
+                </div>
+            </div>
+
+            <!-- Condiciones médicas -->
+            <div class="section-header">
+                <span class="section-pill"></span>
+                <span class="section-title">Condiciones médicas</span>
+            </div>
+
+            <div class="checkbox-group">
+                <label><input type="checkbox" th:field="*{condiciones}" value="anemia"> Anemia</label>
+                <label><input type="checkbox" th:field="*{condiciones}" value="diabetes_gestacional"> Diabetes gestacional</label>
+                <label><input type="checkbox" th:field="*{condiciones}" value="hipertension"> Hipertensión</label>
+                <label><input type="checkbox" th:field="*{condiciones}" value="problemas_tiroideos"> Problemas tiroideos</label>
+            </div>
+
+            <!-- Alergias -->
+            <div class="section-header">
+                <span class="section-pill"></span>
+                <span class="section-title">Alergias</span>
+            </div>
+
+            <div class="input-group">
+                <textarea rows="2" th:field="*{alergias}" placeholder="Ej: mariscos, penicilina, frutos secos..."></textarea>
+                <p class="helper">Incluye alimentos, medicamentos o componentes a los que seas alérgica.</p>
+            </div>
+
+            <!-- Síntomas -->
+            <div class="section-header">
+                <span class="section-pill"></span>
+                <span class="section-title">Síntomas actuales</span>
+            </div>
+
+            <div class="checkbox-group">
+                <label><input type="checkbox" th:field="*{sintomas}" value="nauseas"> Náuseas</label>
+                <label><input type="checkbox" th:field="*{sintomas}" value="vomitos"> Vómitos</label>
+                <label><input type="checkbox" th:field="*{sintomas}" value="acidez"> Acidez</label>
+                <label><input type="checkbox" th:field="*{sintomas}" value="hinchazon"> Hinchazón</label>
+                <label><input type="checkbox" th:field="*{sintomas}" value="dolor_lumbar"> Dolor lumbar</label>
+                <label><input type="checkbox" th:field="*{sintomas}" value="fiebre"> Fiebre</label>
+            </div>
+
+            <!-- Hábitos -->
+            <div class="section-header">
+                <span class="section-pill"></span>
+                <span class="section-title">Hábitos alimenticios</span>
+            </div>
+
+            <div class="checkbox-group">
+                <label><input type="checkbox" th:field="*{habitos}" value="vegetariana"> Vegetariana</label>
+                <label><input type="checkbox" th:field="*{habitos}" value="vegana"> Vegana</label>
+                <label><input type="checkbox" th:field="*{habitos}" value="sin_cerdo"> No como cerdo</label>
+                <label><input type="checkbox" th:field="*{habitos}" value="sin_lactosa"> Sin lactosa</label>
+                <label><input type="checkbox" th:field="*{habitos}" value="sin_frutos_secos"> Sin frutos secos</label>
+            </div>
+
+            <div class="input-group">
+                <label>Alimentos que no te gustan</label>
+                <textarea rows="2" th:field="*{noGusta}" placeholder="Ej: hígado, yogurt, brócoli..."></textarea>
+            </div>
+
+            <!-- Suplementos -->
+            <div class="section-header">
+                <span class="section-pill"></span>
+                <span class="section-title">Suplementos</span>
+            </div>
+
+            <div class="checkbox-group">
+                <label><input type="checkbox" th:field="*{suplementos}" value="hierro"> Hierro</label>
+                <label><input type="checkbox" th:field="*{suplementos}" value="acido_folico"> Ácido fólico</label>
+                <label><input type="checkbox" th:field="*{suplementos}" value="calcio"> Calcio</label>
+            </div>
+
+            <!-- Medicación -->
+            <div class="section-header">
+                <span class="section-pill"></span>
+                <span class="section-title">Medicaciones</span>
+            </div>
+
+            <div class="input-group">
+                <textarea rows="2" th:field="*{medicacion}" placeholder="Nombre del medicamento, dosis y frecuencia"></textarea>
+            </div>
+
+            <!-- Estilo de vida -->
+            <div class="section-header">
+                <span class="section-pill"></span>
+                <span class="section-title">Estilo de vida</span>
+            </div>
+
+            <div class="grid-2">
+                <div class="input-group">
+                    <label>Nivel de actividad física</label>
+                    <select th:field="*{actividad}">
+                        <option value="" disabled>Selecciona</option>
+                        <option value="sedentaria">Sedentaria</option>
+                        <option value="ligera">Ligera</option>
+                        <option value="moderada">Moderada</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Horas de sueño</label>
+                    <input type="number" min="0" max="24" th:field="*{horasSueno}">
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit">Continuar ➜</button>
+            
+        </form>
+
+    </div>
+</div>
+
+</body>
+</html>
