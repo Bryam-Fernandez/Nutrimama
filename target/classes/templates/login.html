@@ -2,675 +2,471 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>NutriMama – Inicia sesión</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NutriMama · Bienvenida</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Fuente Lato -->
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!-- Fuentes elegantes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome para íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <style>
-        :root {
-            --pink-strong: #DA627D;
-            --pink-soft:  #FFA5AB;
-            --cream:      #FFE8D2;
-            --mint:       #B6E2BA;
-            --text-main:  #333333;
-            --text-muted: #7A7A7A;
-            --radius-xl:  26px;
-        }
-
         * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
         }
 
+        /* PALETA DE COLORES PERSONALIZADA */
+        :root {
+            --color1: #ff9cf4;  /* Rosa claro */
+            --color2: #ffc3e1;  /* Rosa pastel */
+            --color3: #3b0c1d;  /* Vino oscuro */
+            --color4: #8f827e;  /* Gris/marrón suave */
+            --color5: #fffaf2;  /* Crema/blanco hueso */
+        }
+
         body {
-            margin: 0;
-            font-family: "Lato", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            font-family: 'Montserrat', sans-serif;
+            min-height: 100vh;
+            width: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+
+        /* ===== CARRUSEL DE FONDO ===== */
+        .background-carousel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        .carousel-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1.5s ease-in-out, visibility 1.5s ease-in-out;
+        }
+
+        .carousel-slide.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.7) blur(2px);
+            transform: scale(1.05);
+            transition: transform 8s ease;
+        }
+
+        .carousel-slide.active img {
+            transform: scale(1.1);
+        }
+
+        /* Capa de superposición para mejorar legibilidad */
+        .carousel-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, rgba(255, 156, 244, 0.2) 0%, rgba(255, 195, 225, 0.3) 100%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* CONTENEDOR PRINCIPAL - CENTRADO */
+        .login-container {
+            width: 100%;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
-            /* Fondo más discreto y uniforme */
-            background: linear-gradient(
-                135deg,
-                #FFE8D2 0%,
-                #FFF4F7 45%,
-                #FFA5AB 100%
-            );
+            z-index: 1;
         }
 
-        .shell {
+        /* TARJETA PRINCIPAL */
+        .login-card {
             width: 100%;
-            max-width: 980px;
-        }
-
-        .auth-card {
-            background: rgba(255,255,255,0.96);
-            border-radius: var(--radius-xl);
-            box-shadow: 0 16px 50px rgba(0,0,0,0.12);
-            overflow: hidden;
-            display: grid;
-            grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-            backdrop-filter: blur(14px);
-        }
-
-        /* PANEL IZQUIERDO – Brand / mensaje */
-        .brand-panel {
-            position: relative;
-            padding: 22px 28px 22px;
-            background: radial-gradient(circle at top left, #FFE8D2 0, #FFA5AB 36%, #DA627D 100%);
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .brand-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            margin-bottom: 8px;
-        }
-
-        .brand-logo {
-            width: 140px;
-            height: auto;
-            object-fit: contain;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.18));
-        }
-
-        .tag-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 4px 12px;
-            border-radius: 999px;
-            font-size: 12px;
-            background: rgba(255,232,210,0.32);
-        }
-
-        .brand-main {
-            margin-top: 10px;
-            max-width: 290px;
-        }
-
-        .brand-title {
-            font-size: 24px; /* un poco más pequeño */
-            font-weight: 900;
-            letter-spacing: 0.02em;
-            margin: 0 0 6px;
-        }
-
-        .brand-subtitle {
-            font-size: 14px;
-            line-height: 1.6;
-            margin: 0;
-        }
-
-        /* CARRUSEL */
-        .hero-carousel {
-            margin-top: 16px;
-            background: rgba(255, 255, 255, 0.18);
+            max-width: 420px;
+            background: rgba(255, 250, 242, 0.15);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border-radius: 20px;
-            padding: 10px 12px 14px;
-            backdrop-filter: blur(4px);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .hero-slide {
-            display: none;
+            padding: 50px 30px 40px;
+            box-shadow: 0 25px 45px rgba(59, 12, 29, 0.3);
+            border: 1px solid rgba(255, 250, 242, 0.3);
             text-align: center;
+            animation: fadeIn 1s ease;
         }
 
-        .hero-slide.active {
-            display: block;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .hero-image-frame {
-            width: 190px;
-            height: 190px;
-            border-radius: 22px;
-            background: rgba(255,255,255,0.95);
-            padding: 10px;
-            margin: 0 auto;
-            box-shadow: 0 8px 18px rgba(0,0,0,0.10);
+        /* LOGO SUPERIOR */
+        .logo {
+            margin-bottom: 40px;
         }
 
-        .hero-slide img {
+        .logo img {
+            max-width: 100%;
+            height: auto;
+            filter: drop-shadow(0 4px 8px rgba(59, 12, 29, 0.3));
+        }
+
+        /* CONTENEDOR DE CAMPOS */
+        .form-container {
+            background: var(--color5);
+            border-radius: 16px;
+            padding: 30px 25px;
+            box-shadow: 0 15px 35px rgba(59, 12, 29, 0.2);
+            margin-bottom: 20px;
+        }
+
+        /* GRUPO DE INPUTS */
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-group input {
             width: 100%;
-            height: 100%;
-            border-radius: 18px;
-            object-fit: contain; /* se ve COMPLETA la imagen */
+            padding: 16px 50px 16px 20px;
+            border: none;
+            border-bottom: 2px solid var(--color2);
+            background: transparent;
+            font-size: 16px;
+            color: var(--color3);
+            transition: all 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
         }
 
-        .hero-slide h3 {
-            margin: 10px 0 4px;
-            font-size: 16px; /* H3 más peque */
+        .input-group input:focus {
+            outline: none;
+            border-bottom-color: var(--color1);
+        }
+
+        .input-group input::placeholder {
+            color: var(--color4);
+            font-weight: 400;
+        }
+
+        /* ÍCONOS A LA DERECHA */
+        .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--color1);
+            font-size: 18px;
+            opacity: 0.8;
+        }
+
+        /* BOTÓN PRINCIPAL */
+        .btn-login {
+            width: 100%;
+            padding: 16px;
+            background: rgba(59, 12, 29, 0.9);
+            border: none;
+            border-radius: 50px;
+            color: var(--color5);
+            font-size: 18px;
             font-weight: 700;
-            line-height: 1.4;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 15px 0 20px;
+            box-shadow: 0 10px 20px rgba(59, 12, 29, 0.3);
+            text-transform: uppercase;
         }
 
-        .hero-slide h3 span {
-            color: #FFE8D2;
-            font-weight: 900;
+        .btn-login:hover {
+            background: var(--color3);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px rgba(59, 12, 29, 0.4);
         }
 
-        .hero-slide p {
-            margin: 0;
-            font-size: 13px;
-            line-height: 1.5;
-            opacity: 0.95;
+        .btn-login:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
         }
 
-        .hero-dots {
-            margin-top: 10px;
+        /* ENLACES SECUNDARIOS */
+        .links {
             display: flex;
             justify-content: center;
-            gap: 6px;
+            gap: 30px;
+            margin-bottom: 30px;
         }
 
-        .hero-dots .dot {
-            width: 7px;
-            height: 7px;
-            border-radius: 999px;
-            border: 0;
-            background: rgba(255, 255, 255, 0.55);
-            cursor: pointer;
-            padding: 0;
-            transition: width 0.2s, background-color 0.2s, opacity 0.2s;
-        }
-
-        .hero-dots .dot.active {
-            width: 16px;
-            background: #FFE8D2;
-            opacity: 1;
-        }
-
-        .brand-footer {
-            margin-top: auto; /* se baja al fondo */
-            padding-top: 12px;
-            font-size: 12px;
-            opacity: 0.9;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .badge-soft {
-            padding: 3px 9px;
-            border-radius: 999px;
-            background: rgba(255,255,255,0.22);
-            font-size: 11px;
-        }
-
-        .bubble {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(1px);
-            opacity: 0.7;
-        }
-
-        .bubble.b1 {
-            width: 110px;
-            height: 110px;
-            background: rgba(255,232,210,0.65);
-            top: -30px;
-            right: -25px;
-        }
-
-        .bubble.b2 {
-            width: 78px;
-            height: 78px;
-            background: rgba(182,226,186,0.7);
-            bottom: 22px;
-            right: 32px;
-        }
-
-        /* PANEL DERECHO – Formulario */
-        .form-panel {
-            padding: 24px 30px 24px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 18px;
-        }
-
-        .back-btn {
-            border: none;
-            background: transparent;
-            font-size: 20px;
-            cursor: pointer;
-            color: var(--text-muted);
-            padding: 5px 7px;
-            border-radius: 999px;
-            transition: background-color 0.15s;
-        }
-
-        .back-btn:hover {
-            background-color: #f1f1f1;
-        }
-
-        .small-note {
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-
-        .small-note a {
-            color: var(--pink-strong);
-            font-weight: 600;
+        .links a {
+            color: var(--color5);
             text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0.9;
+            transition: opacity 0.3s;
+            text-shadow: 0 1px 3px rgba(59, 12, 29, 0.3);
         }
 
-        .small-note a:hover {
+        .links a:hover {
+            opacity: 1;
             text-decoration: underline;
         }
 
-        .form-header h1 {
-            margin: 0;
-            font-size: 22px; /* un pelín más pequeño */
-            font-weight: 700;
-            color: var(--text-main);
+        /* BOTONES SOCIALES */
+        .social-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
         }
 
-        .form-header p {
-            margin: 4px 0 18px;
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-
-        form {
+        .social-btn {
             flex: 1;
             display: flex;
-            flex-direction: column;
-        }
-
-        .form-group {
-            margin-bottom: 14px;
-            position: relative;
-        }
-
-        label {
-            display: inline-block;
-            margin-bottom: 5px;
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text-main);
-        }
-
-        input {
-            width: 100%;
-            border-radius: 12px;
-            border: 1px solid #e2e2e2;
-            padding: 10px 13px;
-            font-size: 14px;
-            background-color: #f9fbff;
-            transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
-        }
-
-        input::placeholder {
-            color: #b4b4b4;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--pink-soft);
-            background-color: #ffffff;
-            box-shadow: 0 0 0 2px rgba(255,165,171,0.3);
-        }
-
-        .toggle-password {
-            position: absolute;
-            right: 13px;
-            top: 33px;
-            cursor: pointer;
-            font-size: 16px;
-            color: var(--pink-strong);
-            user-select: none;
-        }
-
-        .forgot-row {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 16px;
-        }
-
-        .forgot-row a {
-            font-size: 12px;
-            color: var(--pink-strong);
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .forgot-row a:hover {
-            text-decoration: underline;
-        }
-
-        .btn-primary {
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 0;
             border: none;
-            width: 100%;
-            padding: 11px;
+            border-radius: 50px;
             font-size: 15px;
-            font-weight: 700;
-            border-radius: 999px;
-            background: linear-gradient(135deg, var(--pink-strong), var(--pink-soft));
-            color: #fff;
+            font-weight: 600;
+            color: white;
             cursor: pointer;
-            box-shadow: 0 12px 24px rgba(218,98,125,0.35);
-            transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.15s;
+            transition: all 0.3s ease;
+            max-width: 160px;
+            box-shadow: 0 8px 15px rgba(59, 12, 29, 0.2);
         }
 
-        .btn-primary:hover {
-            opacity: 0.97;
-            transform: translateY(-1px);
-            box-shadow: 0 16px 30px rgba(218,98,125,0.42);
+        .social-btn i {
+            font-size: 18px;
         }
 
-        .btn-primary:active {
-            transform: translateY(0);
-            box-shadow: 0 9px 20px rgba(218,98,125,0.30);
+        .social-btn.facebook {
+            background: #1877f2;
         }
 
+        .social-btn.google {
+            background: #db4437;
+        }
+
+        .social-btn:hover {
+            transform: translateY(-3px);
+            filter: brightness(1.1);
+            box-shadow: 0 12px 20px rgba(59, 12, 29, 0.3);
+        }
+
+        /* ESTADOS DE MENSAJES */
         .status {
-            margin-top: 8px;
-            font-size: 12px;
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            display: none;
         }
 
         .status.error {
-            color: #d9534f;
-            display: none;
+            background: rgba(255, 195, 225, 0.9);
+            color: var(--color3);
+            border: 1px solid var(--color1);
         }
 
         .status.loading {
-            color: var(--text-muted);
-            display: none;
-        }
-
-        .divider {
-            margin-top: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 11px;
-            color: #b0b0b0;
-        }
-
-        .divider::before,
-        .divider::after {
-            content: "";
-            height: 1px;
-            flex: 1;
-            background: #e4e4e4;
-        }
-
-        .signup {
-            margin-top: 14px;
-            font-size: 13px;
-            text-align: center;
-            color: var(--text-muted);
-        }
-
-        .signup a {
-            color: var(--pink-strong);
-            font-weight: 700;
-            text-decoration: none;
-        }
-
-        .signup a:hover {
-            text-decoration: underline;
+            background: var(--color5);
+            color: var(--color3);
+            border: 1px solid var(--color2);
         }
 
         /* RESPONSIVE */
-        @media (max-width: 900px) {
-            .auth-card {
-                grid-template-columns: 1fr;
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 30px 20px;
             }
-
-            .brand-panel {
-                order: -1;
-                padding: 20px 22px 22px;
+            
+            .links {
+                gap: 20px;
             }
-
-            .brand-main {
-                margin-top: 8px;
+            
+            .social-buttons {
+                flex-direction: column;
+                align-items: center;
             }
-
-            .form-panel {
-                padding: 20px 22px 22px;
-            }
-        }
-
-        @media (max-width: 560px) {
-            body {
-                padding: 14px;
-            }
-
-            .brand-panel {
-                display: none; /* si lo quieres también en móvil, comenta esta línea */
-            }
-
-            .auth-card {
-                grid-template-columns: 1fr;
-            }
-
-            .form-panel {
-                padding: 20px;
-            }
-
-            .form-header h1 {
-                font-size: 21px;
+            
+            .social-btn {
+                max-width: 100%;
+                width: 100%;
             }
         }
     </style>
 </head>
 <body>
-
-<div class="shell">
-    <div class="auth-card">
-
-        <!-- PANEL IZQUIERDO: BRAND + CARRUSEL -->
-        <section class="brand-panel">
-            <div class="brand-header">
-                <img src="img/logo-preview.png" alt="NutriMama" class="brand-logo">
-                <div class="tag-pill">
-                    🌸 <span>Cuidado para ti y tu bebé</span>
-                </div>
-            </div>
-
-            <div class="brand-main">
-                <h2 class="brand-title">Nutrición que abraza tu embarazo.</h2>
-                <p class="brand-subtitle">
-                    Regístrate para recibir orientación de alimentación personalizada según tu semana de gestación,
-                    síntomas y alergias. Una IA pensada solo para mamás como tú.
-                </p>
-            </div>
-
-            <!-- CARRUSEL -->
-            <div class="hero-carousel">
-                <div class="hero-slide active">
-                    <div class="hero-image-frame">
-                        <img src="img/login1.webp" alt="Track and enjoy your pregnancy journey">
-                    </div>
-                    <h3>Track and enjoy your<br><span>pregnancy journey</span></h3>
-                    <p>Registra tus síntomas y avances semana a semana para cuidar mejor de ti y tu bebé.</p>
-                </div>
-
-                <div class="hero-slide">
-                    <div class="hero-image-frame">
-                        <img src="img/login2.webp" alt="Monitor baby progress">
-                    </div>
-                    <h3>Monitor your baby’s<br><span>progress day by day</span></h3>
-                    <p>Visualiza la evolución de tu bebé y recibe recomendaciones nutricionales a su medida.</p>
-                </div>
-
-                <div class="hero-slide">
-                    <div class="hero-image-frame">
-                        <img src="img/login3.webp" alt="Self-care and connection">
-                    </div>
-                    <h3>Self-care and connection<br><span>for expectant moms</span></h3>
-                    <p>Encuentra recordatorios, tips y guía para vivir tu embarazo con más calma.</p>
-                </div>
-
-                <div class="hero-dots">
-                    <button class="dot active" data-slide="0"></button>
-                    <button class="dot" data-slide="1"></button>
-                    <button class="dot" data-slide="2"></button>
-                </div>
-            </div>
-
-            <div class="brand-footer">
-                <span class="badge-soft">IA Nutricional</span>
-                <span>Hecho con cariño 💗</span>
-            </div>
-
-            <span class="bubble b1"></span>
-            <span class="bubble b2"></span>
-        </section>
-
-        <!-- PANEL DERECHO: FORMULARIO -->
-        <section class="form-panel">
-            <div class="form-top">
-                <button class="back-btn" onclick="window.history.back()">←</button>
-                <div class="small-note">
-                    ¿Aún no tienes cuenta?
-                    <a href="/register">Regístrate</a>
-                </div>
-            </div>
-
-            <div class="form-header">
-                <h1>Bienvenida</h1>
-                <p>Inicia sesión para continuar con tu plan NutriMama.</p>
-            </div>
-
-            <form id="loginForm">
-                <div class="form-group">
-                    <label for="email">Correo electrónico</label>
-                    <input type="email" id="email" placeholder="tucorreo@ejemplo.com" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="password">Contraseña</label>
-                    <input type="password" id="password" placeholder="Ingresa tu contraseña" required>
-                    <span class="toggle-password" id="togglePassword">👁</span>
-                </div>
-
-                <div class="forgot-row">
-                    <a href="#">¿Olvidaste tu contraseña?</a>
-                </div>
-
-                <button type="submit" class="btn-primary">Iniciar sesión</button>
-
-                <div class="status error" id="errorMsg"></div>
-                <div class="status loading" id="loader">Verificando tus datos...</div>
-
-                <div class="divider">o</div>
-            </form>
-
-            <div class="signup">
-                ¿Eres nueva en NutriMama?
-                <a href="/register">Crea tu cuenta</a>
-            </div>
-        </section>
-
+    <!-- CARRUSEL DE FONDO - TÚ PONES LAS IMÁGENES AQUÍ -->
+    <div class="background-carousel">
+        <div class="carousel-slide active">
+            <img src="img/login1.webp" alt="Fondo 1">
+        </div>
+        <div class="carousel-slide">
+            <img src="img/login2.webp" alt="Fondo 2">
+        </div>
+        <div class="carousel-slide">
+            <img src="img/login3.webp" alt="Fondo 3">
+        </div>
     </div>
-</div>
+    
+    <!-- Capa de superposición para mejorar legibilidad -->
+    <div class="carousel-overlay"></div>
 
-<script>
-    // Mostrar / ocultar contraseña
-    const passwordInput = document.getElementById('password');
-    const togglePassword = document.getElementById('togglePassword');
+    <div class="login-container">
+        <div class="login-card">
+            <!-- LOGO SUPERIOR -->
+            <div class="logo">
+                <img src="img/logo-preview.png" alt="Logo" width="300" height="100">
+            </div>
 
-    togglePassword.addEventListener('click', () => {
-        const type = passwordInput.type === 'password' ? 'text' : 'password';
-        passwordInput.type = type;
-        togglePassword.textContent = type === 'password' ? '👁' : '🙈';
-    });
+            <!-- CONTENEDOR DE CAMPOS -->
+            <div class="form-container">
+                <form id="loginForm">
+                    <!-- CAMPO USERNAME CON ÍCONO -->
+                    <div class="input-group">
+                        <input type="text" id="username" placeholder="Username" required autocomplete="username">
+                        <i class="fas fa-user input-icon"></i>
+                    </div>
 
-    // Lógica de login (adaptable a tu backend)
-    document.getElementById('loginForm').addEventListener('submit', async function (e) {
-        e.preventDefault();
+                    <!-- CAMPO PASSWORD CON ÍCONO -->
+                    <div class="input-group">
+                        <input type="password" id="password" placeholder="Password" required autocomplete="current-password">
+                        <i class="fas fa-lock input-icon"></i>
+                    </div>
 
-        const email = document.getElementById('email').value.trim();
-        const password = passwordInput.value;
+                    <!-- BOTÓN PRINCIPAL LOGIN -->
+                    <button type="submit" class="btn-login">Login</button>
 
-        const errorMsg = document.getElementById('errorMsg');
-        const loader = document.getElementById('loader');
+                    <!-- MENSAJES DE ESTADO -->
+                    <div class="status error" id="errorMsg"></div>
+                    <div class="status loading" id="loader">Verificando...</div>
+                </form>
+            </div>
 
-        errorMsg.style.display = 'none';
-        loader.style.display = 'block';
+            <!-- ENLACES SECUNDARIOS -->
+            <div class="links">
+                <a href="#">Forgot Password?</a>
+                <a href="/register">Sign Up</a>
+            </div>
 
-        try {
-            const response = await fetch('/api/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password })
-            });
+            <!-- BOTONES SOCIALES -->
+            <div class="social-buttons">
+                <button class="social-btn facebook" onclick="window.location.href='/oauth2/authorization/facebook'">
+                    <i class="fab fa-facebook-f"></i>
+                    Facebook
+                </button>
+                <button class="social-btn google" onclick="window.location.href='/oauth2/authorization/google'">
+                    <i class="fab fa-google"></i>
+                    Google
+                </button>
+            </div>
+        </div>
+    </div>
 
-            const data = await response.json();
+    <script>
+        // --- LÓGICA DEL CARRUSEL DE FONDO ---
+        (function() {
+            const slides = document.querySelectorAll('.carousel-slide');
+            if (!slides.length) return;
 
-            if (!response.ok) {
-                throw new Error(data.message || 'Credenciales inválidas');
+            let currentSlide = 0;
+            
+            function nextSlide() {
+                slides[currentSlide].classList.remove('active');
+                currentSlide = (currentSlide + 1) % slides.length;
+                slides[currentSlide].classList.add('active');
             }
 
-            // Login OK
-            sessionStorage.setItem('usuario', JSON.stringify(data));
-            window.location.href = '/formulario-mama';
+            // Cambiar cada 6 segundos
+            setInterval(nextSlide, 6000);
+        })();
 
-        } catch (err) {
-            errorMsg.textContent = err.message;
-            errorMsg.style.display = 'block';
-        } finally {
-            loader.style.display = 'none';
-        }
-    });
+        // --- LÓGICA DE LOGIN ---
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
 
-    // --- Carrusel simple NutriMama ---
-    (function() {
-        const slides = document.querySelectorAll('.hero-slide');
-        const dots   = document.querySelectorAll('.hero-dots .dot');
-        if (!slides.length || !dots.length) return;
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('errorMsg');
+            const loader = document.getElementById('loader');
+            const btn = document.querySelector('.btn-login');
 
-        let current = 0;
-        let timer   = null;
+            // Verificar que los elementos existen
+            if (!errorMsg || !loader) {
+                console.error('Elementos de estado no encontrados');
+                return;
+            }
 
-        function showSlide(index) {
-            slides[current].classList.remove('active');
-            dots[current].classList.remove('active');
+            // Resetear estados
+            errorMsg.style.display = 'none';
+            errorMsg.textContent = '';
+            loader.style.display = 'block';
+            btn.disabled = true;
 
-            current = index;
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: username, password: password })
+                });
 
-            slides[current].classList.add('active');
-            dots[current].classList.add('active');
-        }
+                const data = await response.json();
 
-        function nextSlide() {
-            const next = (current + 1) % slides.length;
-            showSlide(next);
-        }
+                if (!response.ok) {
+                    throw new Error(data.message || 'Credenciales inválidas');
+                }
 
-        dots.forEach(dot => {
-            dot.addEventListener('click', () => {
-                const idx = parseInt(dot.getAttribute('data-slide'), 10);
-                showSlide(idx);
-                resetTimer();
-            });
+                // Login exitoso
+                sessionStorage.setItem('usuario', JSON.stringify(data));
+                window.location.href = '/formulario-mama';
+
+            } catch (err) {
+                // Mostrar error
+                errorMsg.textContent = err.message;
+                errorMsg.style.display = 'block';
+                
+                // Animación de error en el campo de contraseña
+                document.getElementById('password').animate([
+                    { transform: 'translateX(0)' },
+                    { transform: 'translateX(-5px)' },
+                    { transform: 'translateX(5px)' },
+                    { transform: 'translateX(-5px)' },
+                    { transform: 'translateX(5px)' },
+                    { transform: 'translateX(0)' }
+                ], { duration: 400 });
+                
+            } finally {
+                // Restaurar botón
+                loader.style.display = 'none';
+                btn.disabled = false;
+            }
         });
-
-        function resetTimer() {
-            if (timer) clearInterval(timer);
-            timer = setInterval(nextSlide, 5000); // cambia cada 5s
-        }
-
-        resetTimer();
-    })();
-</script>
-
+    </script>
 </body>
 </html>
